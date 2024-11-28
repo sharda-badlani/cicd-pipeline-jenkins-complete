@@ -1,35 +1,43 @@
 plugins {
-  //inlude the nodeJS plugin to execute nodejs and npm tasks
-  id "com.moowork.node" version "1.3.1"
+  //inlude the nodeJS plugin to execute nodejs and npm tasksi
+  // id "org.nodegradle.node" version "3.0.0" // Use the latest stable version
+  id("com.github.node-gradle.node") version "7.1.0"
+}
+
+
+repositories {
+    gradlePluginPortal()  // Ensure this is included
+    mavenCentral()
 }
 
 node {
-	download = true
-	version = '14.15.0'
-	npmVersion = '6.14.8'
+        download = true
+        version = "14.15.0"
+        npmVersion = "6.14.8"
 }
 
 //declare a build task
+
 task build
 
 //declare a task to create a zip of the app
 task zip(type: Zip) {
-	from ('.') {
-		include "*"
-		include "bin/**"
-		include "data/**"
-		include "node_modules/**"
-		include "public/**"
-		include "routes/**"
-		include "views/**"
-	}
-	destinationDir(file("dist"))
-	baseName "trainSchedule"
+        from ('.') {
+                include "*"
+                include "bin/**"
+                include "data/**"
+                include "node_modules/**"
+                include "public/**"
+                include "routes/**"
+                include "views/**"
+        }
+        destinationDir(file("dist"))
+        baseName "trainSchedule"
 }
 
 //declare task dependencies
 build.dependsOn zip
 zip.dependsOn npm_build
 npm_build.dependsOn npm_test
-npm_test.dependsOn npmInstall
-npm_build.dependsOn npmInstall
+npm_test.dependsOn npm_install
+npm_build.dependsOn npm_install
