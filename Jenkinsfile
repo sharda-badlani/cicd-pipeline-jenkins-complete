@@ -34,12 +34,14 @@ pipeline {
                 CANARY_REPLICAS = 1
             }
             steps {
-                kubernetesApply(
-                    CredentialsId: 'kubeconfig',
-                    file: 'train-schedule-kube-canary.yml',
-                
-                )
-            }
+                input 'Deploy to Production?'
+                milestone(1)
+                withCredentials([file(credentialsId: 'kubeconfig', variable: 'kubeconfig')]) {
+                    sh """
+                    kubectl apply -f train-schedule-kube-canary.yml --kubeconfig=$kubeconfig
+                    kubectl apply -f train-schedule-kube.yml --kubeconfig=$kubeconfig
+                    """
+                }
         }
         stage('DeployToProduction') {
            
@@ -49,17 +51,12 @@ pipeline {
             steps {
                 input 'Deploy to Production?'
                 milestone(1)
-                kubernetesApply(
-                    CredentialsId: 'kubeconfig',
-                    file: 'train-schedule-kube-canary.yml',
-                
-                )
-                kubernetesApply(
-                   CredentialsId: 'kubeconfig',
-                     file: 'train-schedule-kube.yml'
-                    
-                )
-            }
+                withCredentials([file(credentialsId: 'kubeconfig', variable: 'kubeconfig')]) {
+                    sh """
+                    kubectl apply -f train-schedule-kube-canary.yml --kubeconfig=$kubeconfig
+                    kubectl apply -f train-schedule-kube.yml --kubeconfig=$kubeconfig
+                    """
+                }
         }
     }
 }
