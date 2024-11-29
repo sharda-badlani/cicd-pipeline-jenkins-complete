@@ -35,7 +35,7 @@ pipeline {
             }
             steps {
                 kubernetesApply(
-                    kubeconfigId: 'kubeconfig',
+                    CredentialsId: 'kubeconfig',
                     file: 'train-schedule-kube-canary.yml',
                 
                 )
@@ -50,12 +50,12 @@ pipeline {
                 input 'Deploy to Production?'
                 milestone(1)
                 kubernetesApply(
-                    kubeconfigId: 'kubeconfig',
+                    CredentialsId: 'kubeconfig',
                     file: 'train-schedule-kube-canary.yml',
                 
                 )
                 kubernetesApply(
-                    kubeconfigId: 'kubeconfig',
+                   CredentialsId: 'kubeconfig',
                      file: 'train-schedule-kube.yml'
                     
                 )
