@@ -42,7 +42,8 @@ pipeline {
                     kubectl apply -f train-schedule-kube.yml --kubeconfig=$kubeconfig
                     """
                 }
-        }
+            }
+         }
         stage('DeployToProduction') {
            
             environment { 
@@ -59,4 +60,5 @@ pipeline {
                 }
         }
     }
+}
 }
