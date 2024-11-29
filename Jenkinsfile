@@ -34,7 +34,7 @@ pipeline {
                 CANARY_REPLICAS = 1
             }
             steps {
-                input 'Deploy to Production?'
+                #input 'Deploy to Production?'
                 milestone(1)
                 withCredentials([file(credentialsId: 'kubeconfig', variable: 'kubeconfig')]) {
                     sh """
