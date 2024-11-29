@@ -12,7 +12,7 @@ repositories {
 
 node {
         download = true
-        version = "18.20.5"
+        version = "20.18.1"
         npmVersion = "10.8.2"
 }
 
