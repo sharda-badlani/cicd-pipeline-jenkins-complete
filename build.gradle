@@ -12,8 +12,8 @@ repositories {
 
 node {
         download = true
-        version = "14.21.3"
-        npmVersion = "6.14.18"
+        version = "14.15.0"
+        npmVersion = "6.14.8"
 }
 
 //declare a build task
