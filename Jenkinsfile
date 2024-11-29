@@ -34,10 +34,10 @@ pipeline {
                 CANARY_REPLICAS = 1
             }
             steps {
-                kubernetesDeploy(
+                kubernetesApply(
                     kubeconfigId: 'kubeconfig',
-                    configs: 'train-schedule-kube-canary.yml',
-                    enableConfigSubstitution: true
+                    file: 'train-schedule-kube-canary.yml',
+                
                 )
             }
         }
@@ -49,15 +49,15 @@ pipeline {
             steps {
                 input 'Deploy to Production?'
                 milestone(1)
-                kubernetesDeploy(
+                kubernetesApply(
                     kubeconfigId: 'kubeconfig',
-                    configs: 'train-schedule-kube-canary.yml',
-                    enableConfigSubstitution: true
+                    file: 'train-schedule-kube-canary.yml',
+                
                 )
-                kubernetesDeploy(
+                kubernetesApply(
                     kubeconfigId: 'kubeconfig',
-                    configs: 'train-schedule-kube.yml',
-                    enableConfigSubstitution: true
+                     file: 'train-schedule-kube.yml'
+                    
                 )
             }
         }
