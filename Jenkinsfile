@@ -35,32 +35,32 @@ pipeline {
                 CANARY_REPLICAS = 1
             }
             steps {
-                kubernetesDeploy(
-                    kubeconfigId: 'kubeconfig',
-                    configs: 'train-schedule-kube-canary.yml',
-                    enableConfigSubstitution: true
-                )
+                
+                milestone(1)
+                withKubeConfig([credentialsId: 'kubeconfig', serverUrl: 'https://35.200.162.22']) {
+                    sh 'kubectl apply -f train-schedule-kube-canary.yml'
+                    sh 'kubectl apply -f train-schedule-kube.yml'
+                  
+ 
+                   
+                }
             }
-        }
+         }
         stage('DeployToProduction') {
-            
+           
             environment { 
                 CANARY_REPLICAS = 0
             }
             steps {
-                input 'Deploy to Production?'
+                
                 milestone(1)
-                kubernetesDeploy(
-                    kubeconfigId: 'kubeconfig',
-                    configs: 'train-schedule-kube-canary.yml',
-                    enableConfigSubstitution: true
-                )
-                kubernetesDeploy(
-                    kubeconfigId: 'kubeconfig',
-                    configs: 'train-schedule-kube.yml',
-                    enableConfigSubstitution: true
-                )
-            }
+                 withKubeConfig([credentialsId: 'kubeconfig', serverUrl: 'https://35.200.162.22']) {
+                    sh 'kubectl apply -f train-schedule-kube-canary.yml'
+                    sh 'kubectl apply -f train-schedule-kube.yml'
+                  
+
+                }
         }
     }
+}
 }
